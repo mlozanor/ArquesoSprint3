@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 from solicitudes.logic.solicitud_logic import getSolicitudById
-from .logic.logic_alarm import getAlarms, createAlarm, get_documentos_by_solicitud
+from .logic.logic_alarm import getAlarms, create_alarm, get_documentos_by_solicitud
 
 def alarm_list(request):
     alarms = getAlarms()
@@ -12,15 +12,15 @@ def alarm_list(request):
 def generate_alarm(request, solicitud_id):
     solicitud = getSolicitudById(solicitud_id)
     documentos = get_documentos_by_solicitud(solicitud_id)
-    createAlarm = False
+    create_alarm = False
     upperDocumento = None
     for documento in documentos:
         if documento.value >= 30:
-            createAlarm = True
+            create_alarm = True
             upperDocumento = documento
 
-    if createAlarm:
-        alarm = createAlarm(solicitud, upperDocumento, 30)
+    if create_alarm:
+        alarm = create_alarm(solicitud, upperDocumento, 30)
         return JsonResponse(alarm.toJson(), safe=False)
     else:
         return JsonResponse({'message': 'No alarm created'}, status=200)
